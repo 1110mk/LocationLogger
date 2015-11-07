@@ -9,6 +9,12 @@
 #import "LocationEntryController.h"
 #import "Stack.h"
 
+@interface LocationEntryController()
+
+@property (nonatomic, strong) NSArray *entries;
+
+@end
+
 @implementation LocationEntryController
 
 + (LocationEntryController *)sharedInstance {
@@ -42,17 +48,24 @@
 }
 
 #pragma mark - Read
-- (NSArray *)entries {
+- (void)loadEntries {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Entry"];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:@NO]];
     NSArray *fetchedObjects = [[Stack sharedInstance].managedObjectContext
                                executeFetchRequest:fetchRequest
                                error:nil];
-    return fetchedObjects;
+    self.entries = fetchedObjects;
 }
 
 #pragma mark: Delete
 - (void)removeEntry:(Entry *)entry{
+    NSMutableArray *mutableEntries = [NSMutableArray arrayWithArray:self.entries];
+    if ([mutableEntries containsObject:entry]) {
+        [mutableEntries removeObject:entry];
+    }
+    self.entries = mutableEntries;
     [entry.managedObjectContext deleteObject:entry];
+    [self saveToPersistentStorage];
 }
 
 

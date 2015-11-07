@@ -22,6 +22,7 @@
                          manualFlag:(NSNumber *)manualFlag;
 
 
+-(void)loadEntries;
 -(void)removeEntry:(Entry *)entry;
 -(void)save;
 

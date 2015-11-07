@@ -12,6 +12,8 @@
 
 @interface ShowDataTableViewController ()
 
+
+
 @end
 
 @implementation ShowDataTableViewController
@@ -22,6 +24,12 @@
 
     [self.tableView reloadData];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [[LocationEntryController sharedInstance] loadEntries];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -75,13 +83,45 @@
     Entry *entry = [LocationEntryController sharedInstance].entries[indexPath.row];
     [[LocationEntryController sharedInstance] removeEntry:entry];
     
-    //reload the table data
-    [tableView reloadData];
+    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     
     
 }
 
+#pragma mark - PREDICATES
+//...
+//NSFetchRequest *fetchRequest = ... ;
+//NSPredicate *pred = ...;
+//[fetchRequest setPredicate:pred];
+//...
+
+//-(NSFetchedResultsController *)fetchedResultsController {
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Entry" inManagedObjectContext:managedObjectContext];
+
+    
+    
+//    return self.fetchedResultsController;
+//}
+////    // Create fetch request
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"FailedBankInfo"
+//                                              inManagedObjectContext:managedObjectContext];
+//    [fetchRequest setEntity:entity];
+//    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"details.closeDate" ascending:NO];
+//    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
+//    [fetchRequest setFetchBatchSize:20];
+//    // Create predicate
+//    NSPredicate *pred = [NSPredicate predicateWithFormat:@"name CONTAINS %@", self.searchBar.text];
+//    [fetchRequest setPredicate:pred];
+//    // Create fetched results controller
+//    NSFetchedResultsController *theFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+//                                                                                                  managedObjectContext:managedObjectContext sectionNameKeyPath:nil cacheName:nil]; // better to not use cache
+//    self.fetchedResultsController = theFetchedResultsController;
+//    _fetchedResultsController.delegate = self;
+//    return _fetchedResultsController;
+//}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
