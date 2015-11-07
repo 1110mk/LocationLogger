@@ -50,7 +50,7 @@
 #pragma mark - Read
 - (void)loadEntries {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Entry"];
-    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:@NO]];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]];
     NSArray *fetchedObjects = [[Stack sharedInstance].managedObjectContext
                                executeFetchRequest:fetchRequest
                                error:nil];
