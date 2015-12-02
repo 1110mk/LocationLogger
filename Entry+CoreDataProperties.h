@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Entry (CoreDataProperties)
 
+@property (nullable, nonatomic, retain) NSString *stateUS;
 @property (nullable, nonatomic, retain) CLLocation *location;
 @property (nullable, nonatomic, retain) CLPlacemark *placemark;
 @property (nullable, nonatomic, retain) NSDate *timestamp;

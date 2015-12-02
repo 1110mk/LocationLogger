@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
+#import "StateData.h"
 
-@interface ShowDataTableViewController : UITableViewController
+
+@interface ShowDataTableViewController : UITableViewController <MFMailComposeViewControllerDelegate>
 
 @end

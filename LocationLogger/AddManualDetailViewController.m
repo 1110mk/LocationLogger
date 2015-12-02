@@ -5,23 +5,40 @@
 //  Created by Erin Krentz on 10/29/15.
 //  Copyright © 2015 EMK. All rights reserved.
 //
+//  This View Controller allows the user:
+//      1. to enter their location manually by
+//          typing in city, state, and country,
+//          setting the date picker, and
+//          setting the part of the day.
+//
+//      2. if there is a duplicate manual entry,
+//          the user can select which entry to keep
+
+
 
 #import "AddManualDetailViewController.h"
 #import "LocationEntryController.h"
 #import "LocateMeNowDetailViewController.h"
-#import "LocalEntry.h"
+#import "CheckEntryController.h"
+#import "TemporaryEntry.h"
 
 
-@interface AddManualDetailViewController ()
+@interface AddManualDetailViewController () <UITextFieldDelegate>
+
+
+// View fields
 @property (weak, nonatomic) IBOutlet UITextField *cityTextField;
 @property (weak, nonatomic) IBOutlet UITextField *stateTextField;
 @property (weak, nonatomic) IBOutlet UITextField *countryTextField;
 
 @property (weak, nonatomic) IBOutlet UIDatePicker *locationDatePicker;
 
-
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 
+
+// User enters location by city and state
+// which needs to be converted to coordinates for Model Entry
+// Geocoder does a forward address decoding to do this
 @property (strong, nonatomic) CLGeocoder *geocoder;
 
 @end
@@ -30,11 +47,43 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Initialize an entry
-    LocalEntry *localEntry = [LocalEntry new];
-    [self updateWithEntry:localEntry];
     
-    //add the geocoder in to get the city and state
+    // The LocateMeNowDetailViewController is going to send data in so the fields can be set right away
+    
+    //Use the text fields to get the city, state, and country
+    self.cityTextField.text = self.entryCity;
+    self.stateTextField.text = self.entryState;
+    self.countryTextField.text = self.entryCountry;
+    
+    //Set the segmented control. The user can change if they want.
+    //to make none highlighted set to -1
+    if ([self.tmpEntry.partOfDay isEqualToString:@"AM"]) {
+        self.segmentedControl.selectedSegmentIndex = 0;
+    } else if ([self.tmpEntry.partOfDay isEqualToString:@"MID"]) {
+        self.segmentedControl.selectedSegmentIndex = 1;
+    } else if ([self.tmpEntry.partOfDay isEqualToString:@"PM"]) {
+        self.segmentedControl.selectedSegmentIndex = 2;
+    }
+
+    // Do NOT allow the user to set a location in the future
+    NSDate *currentDate = [NSDate date];
+    [self.locationDatePicker setMaximumDate:currentDate];
+    
+    //set the date picker
+    [self.locationDatePicker  setDate:self.tmpEntry.timestamp];
+    
+    //all the fields should be set on the view controller from the LocateMeNow view
+    
+    //reset all the addManual fields so those are only set when the user changes
+    self.addManualStateUS = @"nil";
+    self.addManualLocation = nil;
+    self.addManualPlacemark = nil;
+    self.addManualTimestamp = nil;
+    self.addManualManualFlag = nil;
+    self.addManualPartOfDay = @"nil";
+
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -42,60 +91,88 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)updateWithEntry:(LocalEntry *)localEntry{
-    self.cityTextField.text = self.entryCity;
-    self.stateTextField.text = self.entryState;
-    self.countryTextField.text = self.entryCountry;
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
     
-    //set the segmented control
-    //to make none highlighted set to -1
-    
-    if ([self.localEntry.partOfDay isEqualToString:@"AM"]) {
-        self.segmentedControl.selectedSegmentIndex = 0;
-    } else if ([self.localEntry.partOfDay isEqualToString:@"MID"]) {
-        self.segmentedControl.selectedSegmentIndex = 1;
-    } else if ([self.localEntry.partOfDay isEqualToString:@"PM"]) {
-        self.segmentedControl.selectedSegmentIndex = 2;
+    //If the user enters a city, it automatically goes to the state
+    //After entering state, the keyboard disappears
+    if (textField == self.cityTextField) {
+        [self.stateTextField becomeFirstResponder];
+    } else {
+        [textField resignFirstResponder];
     }
+    return NO;
 }
 
 - (IBAction)datePickerUpdated:(id)sender {
+    
+    //If the user changes the picker date, change the date
     NSDate *pickerDate = [self.locationDatePicker date];
-    self.localEntry.timestamp = pickerDate;
+    self.addManualTimestamp = pickerDate;
 }
 
 - (IBAction)segmentedControlChanged:(id)sender {
-    if (self.segmentedControl.selectedSegmentIndex == 0) {
-        [self.localEntry.partOfDay isEqualToString:@"AM"];
-    } else if (self.segmentedControl.selectedSegmentIndex == 1) {
-        [self.localEntry.partOfDay isEqualToString:@"MID"];
-    } else if (self.segmentedControl.selectedSegmentIndex == 2) {
-        [self.localEntry.partOfDay isEqualToString:@"PM"];
+    
+    // update the part of day property based on user selection
+    switch (self.segmentedControl.selectedSegmentIndex) {
+        case 0:
+            self.addManualPartOfDay = @"AM";
+            break;
+        case 1:
+            self.addManualPartOfDay = @"MID";
+            break;
+        case 2:
+            self.addManualPartOfDay = @"PM";
+            break;
+        default:
+            break;
     }
 }
 
 
 - (IBAction)saveButtonPressed:(id)sender {
     
-   //get all the properties and store in correct format
-    //set the timestamp
-    NSDate *pickerDate = [self.locationDatePicker date];
-    self.localEntry.timestamp = pickerDate;
+    //Two things happen in this method:
+    //  1. NEED to set all the parts of the user's location and time
+    //  2. NEED to check if duplicate entry & ask user
+    //      which to keep
     
-    //set the segmented control
-    if (self.segmentedControl.selectedSegmentIndex == 0) {
-        [self.localEntry.partOfDay isEqualToString:@"AM"];
-    } else if (self.segmentedControl.selectedSegmentIndex == 1) {
-        [self.localEntry.partOfDay isEqualToString:@"MID"];
-    } else if (self.segmentedControl.selectedSegmentIndex == 2) {
-        [self.localEntry.partOfDay isEqualToString:@"PM"];
-    }
+   // PART 1: get all six properties and store in correct format
+    
+    //1. set the timestamp
+    //      if the user didn't use the datePicker to set a date, use the one sent in from LocateMeNow
+    if (!self.addManualTimestamp) {
+        self.addManualTimestamp = self.tmpEntry.timestamp;
+     }// END if timestamp
+    
+ 
+        
+    //2. set the part of day the user selects
+    //      if the user didn't use the segmented control to set a part of day, use the one sent in from LocateMeNow
+    
+    if (!self.addManualPartOfDay) {
+        if ([self.tmpEntry.partOfDay isEqualToString:@"AM"]) {
+            self.addManualPartOfDay = @"AM";
+            
+        } else if ([self.tmpEntry.partOfDay isEqualToString:@"MID"]) {
+            self.addManualPartOfDay = @"MID";
+            
+        } else if ([self.tmpEntry.partOfDay isEqualToString:@"PM"]) {
+            self.addManualPartOfDay = @"PM";
+            
+        } else {
+            NSLog(@"Error on addManualPartOfDay");
+        } // END if tmpEntry.partOfDay
+        
+    } //END if addManualPartOfDay
    
-    //set the location and placemark
+   
+    //3.& 4. set the location and placemark using the fields the user enters
     if (!self.geocoder) {
         self.geocoder = [[CLGeocoder alloc] init];
-    }
-    //Get the latest City, State, and Country
+    } //if geocoder
+    
+    //Get the latest City, State, and Country that the user has entered or been sent from LocateMeNow
     self.entryCity = self.cityTextField.text;
     self.entryState = self.stateTextField.text;
     self.entryCountry = self.countryTextField.text;
@@ -106,26 +183,127 @@
     [self.geocoder geocodeAddressString:addressString completionHandler:^(NSArray *placemarks, NSError *error) {
             if ([placemarks count] > 0) {
             
-                //if more than one placemark returned, pick the first one
-                self.localEntry.placemark = [placemarks objectAtIndex:0];
+                //3. if more than one placemark returned, pick the first one
+                self.addManualPlacemark = [placemarks objectAtIndex:0];
             
-                //set the location
-               CLLocation *location = self.localEntry.placemark.location;
-                self.localEntry.location = location;
+                //4. set the location
+               CLLocation *location = self.addManualPlacemark.location;
+                self.addManualLocation = location;
+                
+                //5. set the state
+                //???Do you want to use the state from State text field or the placemark
+                self.addManualStateUS = self.entryState;
             }
-    }];
+    }];  // END geocode address string
 
-    //set the manual Flag
-    self.localEntry.manualFlag = [NSNumber numberWithBool:YES];
+    //6. set the manual Flag
+            //This is always manual from the LocateMeNow or AddManual view controllers
+    self.addManualManualFlag = [NSNumber numberWithBool:YES];
     
-    //save to the shared instance
-    [[LocationEntryController sharedInstance] createEntryWithTimestamp:
-            self.localEntry.timestamp
-        location:self.localEntry.location
-        placemark:self.localEntry.placemark
-        partOfDay:self.localEntry.partOfDay
-        manualFlag:self.localEntry.manualFlag];
-}
+
+    
+    // PART 2: CHECK if unique entry
+    
+    // FUTURE - if you have an auto entry, do you let user change?
+    TemporaryEntry *testThisEntry = nil;
+    
+    testThisEntry = [CheckEntryController checkEntryWithTimestamp:self.addManualTimestamp
+                                                         location:self.addManualLocation
+                                                        placemark:self.addManualPlacemark
+                                                        partOfDay:self.addManualPartOfDay
+                                                       manualFlag:self.addManualManualFlag
+                                                          stateUS:self.addManualStateUS];
+    
+    
+    // if it is not unique, there will be another entry returned above as testThisEntry
+    // if you have two of the same entries, you have these cases:
+    //      a) user wants to use entry they entered
+    //      b) user wants to keep old entry
+    
+    if (testThisEntry != nil) {
+        
+        NSLog(@"\ntestThisEntry is NOT nil in saved button pressed in AddManual\n");
+        
+        
+        //FIRST ask the user what they want to do
+        
+        //start by getting the date from the alternate entry
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MMM d, y"];
+        
+            NSString *dateString = [dateFormatter stringFromDate:testThisEntry.timestamp];
+            NSString *manualString = @"";
+            
+            if ([testThisEntry.manualFlag isEqualToNumber:[NSNumber numberWithBool:YES]]) {
+                manualString = @"Manual";
+            } else {
+                manualString = @"Auto";
+            }
+
+            //NEXT create the full string
+            NSString *alternateString = [NSString stringWithFormat:@"Conflicting Entry:\n%@, %@, %@\n%@ %@ %@", testThisEntry.placemark.locality, testThisEntry.placemark.administrativeArea, testThisEntry.placemark.country, dateString, testThisEntry.partOfDay, manualString];
+        
+
+            //THEN ask which entry to use
+            UIAlertController* errorAlert = [UIAlertController alertControllerWithTitle:@"LocationAlert"
+                        message:alternateString
+                        preferredStyle:UIAlertControllerStyleAlert];
+        
+            //USER picks using the entry he just entered
+            [errorAlert addAction:[UIAlertAction actionWithTitle:@"Use Just Entered Location" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+                //remove the old one Entry from the Shared Model
+                NSLog(@"User is saving entry he just entered in AddManual %@", self.addManualPlacemark.locality);
+
+            
+                //save to the shared instance
+                [[LocationEntryController sharedInstance] createEntryWithTimestamp:self.addManualTimestamp
+                                                                          location:self.addManualLocation
+                                                                         placemark:self.addManualPlacemark
+                                                                         partOfDay:self.addManualPartOfDay
+                                                                        manualFlag:self.addManualManualFlag
+                                                                           stateUS:self.addManualStateUS];
+            
+                //remove the old entry
+                [[LocationEntryController sharedInstance] removeEntryWithTimestamp:testThisEntry.timestamp
+                                                                          location:testThisEntry.location
+                                                                         placemark:testThisEntry.placemark
+                                                                         partOfDay:testThisEntry.partOfDay
+                                                                        manualFlag:testThisEntry.manualFlag
+                                                                           stateUS:testThisEntry.stateUS];
+            
+
+            }]];  // END alert action use new location
+        
+            //USER picks keeping the old entry
+            // You don't have to do anything
+            [errorAlert addAction:[UIAlertAction actionWithTitle:@"Use Stored Location" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSLog(@"User is keeping the old location in AddManual %@", testThisEntry.placemark.locality);
+                
+            }]]; // END alert action use old location
+
+            [self presentViewController:errorAlert animated:YES completion:nil];
+            
+        
+    } else { //Test this entry is nil
+        NSLog(@"TestThisEntry is nil in AddManual");
+      
+        //There is no previous entry, save what the user entered.
+        [[LocationEntryController sharedInstance] createEntryWithTimestamp:self.addManualTimestamp
+                                                                location:self.addManualLocation
+                                                               placemark:self.addManualPlacemark
+                                                               partOfDay:self.addManualPartOfDay
+                                                              manualFlag:self.addManualManualFlag
+                                                                 stateUS:self.addManualStateUS];
+      
+        NSLog(@"No matching entry. Store user's add manual location %@", self.addManualPlacemark.locality);
+
+      
+      
+    }  //end Test This Entry is nil
+ 
+
+}  // end save button pressed
 
 
 

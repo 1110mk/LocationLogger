@@ -13,6 +13,7 @@
 
 @implementation Entry (CoreDataProperties)
 
+@dynamic stateUS;
 @dynamic location;
 @dynamic placemark;
 @dynamic timestamp;

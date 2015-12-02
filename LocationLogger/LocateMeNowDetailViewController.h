@@ -12,7 +12,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 #import "Entry.h"
-#import "LocalEntry.h"
+#import "Entry.h"
 
 
 
@@ -21,7 +21,7 @@
 
 @property (nullable, nonatomic, strong) CLLocationManager *locationManager;
 @property (nullable, nonatomic, strong) Entry *entry;
-@property (nullable, nonatomic, strong) LocalEntry *localEntry;
+@property (nullable, nonatomic, strong) Entry *localEntry;
 
 
 
@@ -30,6 +30,16 @@
 @property (nullable, nonatomic, strong) NSString *entryCity;
 @property (nullable, nonatomic, strong) NSString *entryState;
 @property (nullable, nonatomic, strong) NSString *entryCountry;
+
+
+
+@property (nullable, strong, nonatomic) NSString *currentStateUS;
+@property (nullable, strong, nonatomic) CLLocation *currentLocation;
+@property (nullable, strong, nonatomic) CLPlacemark *currentPlacemark;
+@property (nullable, strong, nonatomic) NSDate *currentTimestamp;
+@property (nullable, strong, nonatomic) NSNumber *currentManualFlag;
+@property (nullable, strong, nonatomic) NSString *currentPartOfDay;
+
 
 
 
