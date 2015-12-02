@@ -235,14 +235,12 @@ CGSize *pageSize;
         //remove the row from the Entry array in the model
         Entry *entry = [LocationEntryController sharedInstance].entries[indexPath.row];
         [[LocationEntryController sharedInstance] removeEntry:entry];
+        
+        [self sortEntries];
+        
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    
-    [self sortEntries];
-    
-//    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-
-    [self.tableView reloadData];
-    
+        
 }
 
 
