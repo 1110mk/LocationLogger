@@ -50,28 +50,22 @@ CGSize *pageSize;
     
     [self.segmentedSortType setSelectedSegmentIndex:0];
     
-    // GET the Core Data stored entries to diplay
-    [self loadEntries];
     
-    //Use the segmented control to determine whether to sort by:
+    // GET the Core Data stored entries to diplay
+    // Use the segmented control to determine whether to sort by:
     //      date
     //      state alphabetically
     //      percent of time spent in state
     
     [self sortEntries];
     
-    [self.tableView reloadData];
-    
-}
-
-- (void)loadEntries {
- 
-     self.entriesArray = [LocationEntryController sharedInstance].entries;
-    
 }
 
 - (void)sortEntries {
 //    self.sortedEntries = [SearchEntriesController sortAllTheEntriesByDate:self.entriesArray];
+    
+    [[LocationEntryController sharedInstance] loadEntries];
+    self.entriesArray = [LocationEntryController sharedInstance].entries;
 
 //    self.segmentedSortType.selectedSegmentIndex = 0;
     if (self.segmentedSortType.selectedSegmentIndex == 0) {
@@ -95,15 +89,13 @@ CGSize *pageSize;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self sortEntries];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
@@ -245,7 +237,6 @@ CGSize *pageSize;
         [[LocationEntryController sharedInstance] removeEntry:entry];
     }
     
-    [self loadEntries];
     [self sortEntries];
     
 //    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
