@@ -60,7 +60,7 @@
     for (StateData *singleState in self.stateDataArray) {
         if (singleState.stateCount > 0) {
             MKPointAnnotation *point2 = [[MKPointAnnotation alloc] init];
-            point2.coordinate = CLLocationCoordinate2DMake(singleState.stateLocation.coordinate.latitude, singleState.stateLocation.coordinate.longitude);
+            point2.coordinate = singleState.stateLocation.coordinate;
             [self.mapView addAnnotation:point2];
            
         }
