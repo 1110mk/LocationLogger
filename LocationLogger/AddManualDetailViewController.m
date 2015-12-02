@@ -75,12 +75,12 @@
     //all the fields should be set on the view controller from the LocateMeNow view
     
     //reset all the addManual fields so those are only set when the user changes
-    self.addManualStateUS = @"nil";
+    self.addManualStateUS = nil;
     self.addManualLocation = nil;
     self.addManualPlacemark = nil;
     self.addManualTimestamp = nil;
     self.addManualManualFlag = nil;
-    self.addManualPartOfDay = @"nil";
+    self.addManualPartOfDay = nil;
     
     
     
@@ -303,6 +303,7 @@
         }
     }];  // END geocode address string
     
+//    [self.navigationController popViewControllerAnimated:YES];
     
 }  // end save button pressed
 
