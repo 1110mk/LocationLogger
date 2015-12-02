@@ -23,7 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // GET the Core Data stored entries to diplay
+    // GET the Core Data stored entries to display
     [self loadEntries];
 
     self.mapView.delegate = self;
@@ -45,8 +45,6 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-//        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 60000, 60000);
-//        [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
     
     // Add an annotation on where the user currently is
     MKPointAnnotation *point = [[MKPointAnnotation alloc] init];
@@ -54,17 +52,19 @@
     [self.mapView addAnnotation:point];
 
     
-    // Add annotations for other places
+    // Add annotations for U.S. Places
     self.stateDataArray = [SearchEntriesController sortAllTheEntriesByPercent:self.entriesArray];
     
     for (StateData *singleState in self.stateDataArray) {
-        if (singleState.stateCount > 0) {
+        int i = [singleState.stateCount intValue];
+        if (i > 0) {
             MKPointAnnotation *point2 = [[MKPointAnnotation alloc] init];
             point2.coordinate = singleState.stateLocation.coordinate;
             [self.mapView addAnnotation:point2];
-           
         }
     }
+    
+    // Add annotations for non-U.S. Places
     
     
 }
@@ -72,8 +72,8 @@
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     
     UIAlertController* errorAlert = [UIAlertController alertControllerWithTitle:@"LocationAlert"
-                                                                        message:@"Failed to get your location."
-                                                                 preferredStyle:UIAlertControllerStyleAlert];
+            message:@"Failed to get your location."
+            preferredStyle:UIAlertControllerStyleAlert];
     
     [errorAlert addAction:[UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSLog(@"Alert");

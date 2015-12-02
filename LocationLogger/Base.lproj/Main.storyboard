@@ -302,7 +302,7 @@
                             <constraint firstItem="efh-AW-0Pw" firstAttribute="centerX" secondItem="Wzp-QC-QdD" secondAttribute="centerX" id="tw0-ju-aw2"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" id="aqF-6W-cal"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="Globe Filled-25" id="aqF-6W-cal"/>
                     <connections>
                         <outlet property="mapView" destination="efh-AW-0Pw" id="rI4-6U-EQB"/>
                     </connections>
@@ -514,7 +514,7 @@
         <scene sceneID="2GZ-mN-2g0">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Vr2-LI-WKj" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Show" id="RzQ-Cb-Ana"/>
+                    <tabBarItem key="tabBarItem" title="Show" image="List Filled-25" selectedImage="List Filled-25" id="RzQ-Cb-Ana"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Esu-TH-sZn">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -533,7 +533,7 @@
         <scene sceneID="oll-06-UjK">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ie3-62-78N" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Locate" id="p5X-VJ-kii"/>
+                    <tabBarItem key="tabBarItem" title="Locate" image="Geo-fence Filled-25 copy" selectedImage="Geo-fence Filled-25 copy" id="p5X-VJ-kii"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Bwu-Uo-DX7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -549,4 +549,9 @@
             <point key="canvasLocation" x="735" y="-423"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Geo-fence Filled-25 copy" width="25" height="25"/>
+        <image name="Globe Filled-25" width="25" height="25"/>
+        <image name="List Filled-25" width="25" height="25"/>
+    </resources>
 </document>
