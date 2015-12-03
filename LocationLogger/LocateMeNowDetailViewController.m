@@ -338,6 +338,7 @@
         
         [self presentViewController:errorAlert animated:YES completion:nil];
         
+        
         //If there is no previous entry, save what the user entered
     } else {
         
