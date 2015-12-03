@@ -33,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 
+@property (weak, nonatomic) IBOutlet UIImageView *savedImageView;
 
 @property (weak, nonatomic) IBOutlet UIButton *locateSaveButton;
 @property (weak, nonatomic) IBOutlet UIButton *locateChangeButton;
@@ -55,6 +56,7 @@
     self.dateLabel.text = nil;
     self.pleaseWaitLabel.text = @"Please Wait For Location";
     
+    
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -63,7 +65,12 @@
     // GPS has a chance to locate the user & set the map
     self.locateSaveButton.hidden = YES;
     self.locateChangeButton.hidden = YES;
+    self.dateLabel.hidden = YES;
+    self.locationLabel.hidden = YES;
     self.pleaseWaitLabel.hidden = NO;
+    
+    //Hide the saved Image view
+    self.savedImageView.hidden= YES;
     
     // Uses CLLocation manager to locate the user
     self.locationManager = [[CLLocationManager alloc] init];
@@ -213,6 +220,8 @@
            
             //add the labels to the Locate Me Now view
             [self.activityIndicatorView stopAnimating];
+            self.locationLabel.hidden = NO;
+            self.dateLabel.hidden = NO;
             self.locationLabel.text = self.locationString;
             self.dateLabel.text = dateAndPartOfDayString;
                 
@@ -303,6 +312,18 @@
                                                                     manualFlag:testThisEntry.manualFlag
                                                                        stateUS:testThisEntry.stateUS];
             
+            //animate a frame to show that it saved
+            self.savedImageView.hidden = NO;
+            
+            [UIView animateWithDuration:1.0 delay:2.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                self.savedImageView.alpha = 0.0;
+                
+            } completion:^(BOOL finished) {
+                
+            }];
+
+
+            
         }]];
         
         //USER picks keeping the old entry
@@ -330,6 +351,17 @@
                                                                     partOfDay:self.currentPartOfDay
                                                                 manualFlag:self.currentManualFlag
                                                                    stateUS:self.currentStateUS];
+        
+        //animate a frame to show that it saved
+        self.savedImageView.hidden = NO;
+        
+        [UIView animateWithDuration:1.0 delay:2.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.savedImageView.alpha = 0.0;
+            
+        } completion:^(BOOL finished) {
+            
+        }];
+
         NSLog(@"No matching entry. Store user's in LocateMeNow");
         
     }

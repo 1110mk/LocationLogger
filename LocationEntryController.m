@@ -122,6 +122,7 @@
                             self.entries = mutableEntries;
                             [compareEntry.managedObjectContext deleteObject:compareEntry];
                             [self saveToPersistentStorage];
+                            break;
 
                                 
                         } //if partOfDay
