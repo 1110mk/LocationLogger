@@ -213,7 +213,7 @@
            
             //add the labels to the Locate Me Now view
             [self.activityIndicatorView stopAnimating];
-                self.locationLabel.text = self.locationString;
+            self.locationLabel.text = self.locationString;
             self.dateLabel.text = dateAndPartOfDayString;
                 
             //finish the label on the View Screen by adding the part of day

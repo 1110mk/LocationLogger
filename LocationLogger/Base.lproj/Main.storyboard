@@ -19,74 +19,81 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ubz-iH-kpo">
-                                <rect key="frame" x="-1" y="64" width="600" height="369"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="369"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="369" id="CSC-Q7-2aT"/>
                                     <constraint firstAttribute="width" constant="600" id="dsf-EP-wYX"/>
                                 </constraints>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uej-jx-YlA">
-                                <rect key="frame" x="239" y="489" width="121" height="30"/>
-                                <state key="normal" title="Save this location">
+                                <rect key="frame" x="28" y="513" width="46" height="35"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <state key="normal" title="Save">
                                     <color key="titleColor" red="0.40000000000000002" green="0.058823529411764705" blue="0.28627450980392155" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="saveButtonPressed:" destination="pF9-7s-nsd" eventType="touchUpInside" id="yyi-WR-gWG"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ECd-53-Hgu">
-                                <rect key="frame" x="230" y="511" width="141" height="30"/>
-                                <state key="normal" title="Change this location">
-                                    <color key="titleColor" red="0.40000000000000002" green="0.058823529411764705" blue="0.28627450980392155" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="6ld-cu-BV1" kind="show" identifier="goToAddManualSegue" id="1RL-4M-UfQ"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TMj-50-3z2">
-                                <rect key="frame" x="20" y="444" width="560" height="14.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Location Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TMj-50-3z2">
+                                <rect key="frame" x="20" y="437" width="560" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="560" id="LY1-cA-FEo"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                <color key="textColor" red="0.40000000000000002" green="0.058823529409999999" blue="0.28627450980000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rp4-dX-HjT">
-                                <rect key="frame" x="20" y="466" width="560" height="14.5"/>
+                                <rect key="frame" x="20" y="463" width="560" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="560" id="4X8-IY-72Y"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                <color key="textColor" red="0.40000000000000002" green="0.058823529409999999" blue="0.28627450980000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="ZHR-c9-oDr">
                                 <rect key="frame" x="290" y="451" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please Wait" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJl-71-tFj">
-                                <rect key="frame" x="255.5" y="482" width="89" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="255" y="489" width="91" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.43529412150000002" blue="0.81176471709999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ECd-53-Hgu">
+                                <rect key="frame" x="492" y="513" width="96" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="2Fk-SK-hg7"/>
+                                    <constraint firstAttribute="height" constant="30" id="92V-yA-U9h"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <state key="normal" title="Add More">
+                                    <color key="titleColor" red="0.40000000000000002" green="0.058823529411764705" blue="0.28627450980392155" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="6ld-cu-BV1" kind="show" identifier="goToAddManualSegue" id="1RL-4M-UfQ"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.23921568627450979" green="0.49019607843137253" blue="0.49803921568627452" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.68235294117647061" green="0.88235294117647056" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="uej-jx-YlA" firstAttribute="top" secondItem="rp4-dX-HjT" secondAttribute="bottom" constant="8" id="9M8-5K-uey"/>
-                            <constraint firstItem="ECd-53-Hgu" firstAttribute="centerX" secondItem="uy1-Yu-Y0Z" secondAttribute="centerX" id="CRN-cs-MaF"/>
-                            <constraint firstItem="QFr-SQ-LGQ" firstAttribute="top" secondItem="ECd-53-Hgu" secondAttribute="bottom" constant="15" id="JRf-fY-64l"/>
+                            <constraint firstItem="uej-jx-YlA" firstAttribute="leading" secondItem="uy1-Yu-Y0Z" secondAttribute="leadingMargin" constant="8" id="14H-40-AMN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ECd-53-Hgu" secondAttribute="trailing" constant="-8" id="3ny-4h-Qek"/>
+                            <constraint firstItem="ECd-53-Hgu" firstAttribute="top" secondItem="rp4-dX-HjT" secondAttribute="bottom" constant="32" id="BmS-Pg-4B4"/>
+                            <constraint firstItem="QFr-SQ-LGQ" firstAttribute="top" secondItem="ECd-53-Hgu" secondAttribute="bottom" constant="13" id="HFe-ln-us1"/>
+                            <constraint firstItem="ubz-iH-kpo" firstAttribute="centerX" secondItem="uy1-Yu-Y0Z" secondAttribute="centerX" id="Itd-Te-ag8"/>
                             <constraint firstItem="ZHR-c9-oDr" firstAttribute="centerX" secondItem="uy1-Yu-Y0Z" secondAttribute="centerX" id="M5s-fa-R23"/>
-                            <constraint firstItem="bJl-71-tFj" firstAttribute="top" secondItem="ubz-iH-kpo" secondAttribute="bottom" constant="49" id="P5B-Uh-pbH"/>
-                            <constraint firstItem="ubz-iH-kpo" firstAttribute="leading" secondItem="uy1-Yu-Y0Z" secondAttribute="leadingMargin" constant="-21" id="RlH-OH-Qxa"/>
                             <constraint firstItem="ubz-iH-kpo" firstAttribute="top" secondItem="y1e-Jr-JFZ" secondAttribute="bottom" id="eZI-Pa-K7a"/>
+                            <constraint firstItem="bJl-71-tFj" firstAttribute="top" secondItem="ZHR-c9-oDr" secondAttribute="bottom" constant="18" id="esP-X2-XDE"/>
+                            <constraint firstItem="QFr-SQ-LGQ" firstAttribute="top" secondItem="uej-jx-YlA" secondAttribute="bottom" constant="8" id="fRf-L2-nBn"/>
                             <constraint firstItem="bJl-71-tFj" firstAttribute="centerX" secondItem="uy1-Yu-Y0Z" secondAttribute="centerX" id="feU-kT-hUe"/>
-                            <constraint firstItem="uej-jx-YlA" firstAttribute="top" secondItem="ZHR-c9-oDr" secondAttribute="bottom" constant="18" id="jKD-zZ-Q18"/>
+                            <constraint firstItem="ZHR-c9-oDr" firstAttribute="top" secondItem="ubz-iH-kpo" secondAttribute="bottom" constant="18" id="fyz-mV-W8l"/>
                             <constraint firstItem="rp4-dX-HjT" firstAttribute="centerX" secondItem="uy1-Yu-Y0Z" secondAttribute="centerX" id="t6d-py-lOs"/>
                             <constraint firstItem="TMj-50-3z2" firstAttribute="centerX" secondItem="uy1-Yu-Y0Z" secondAttribute="centerX" id="t9r-Ld-b3R"/>
-                            <constraint firstItem="rp4-dX-HjT" firstAttribute="top" secondItem="TMj-50-3z2" secondAttribute="bottom" constant="8" id="uH2-mR-HcW"/>
-                            <constraint firstItem="ECd-53-Hgu" firstAttribute="top" secondItem="uej-jx-YlA" secondAttribute="bottom" constant="-8" id="wUu-3D-JNg"/>
-                            <constraint firstItem="uej-jx-YlA" firstAttribute="centerX" secondItem="uy1-Yu-Y0Z" secondAttribute="centerX" id="zvJ-ta-hXd"/>
+                            <constraint firstItem="rp4-dX-HjT" firstAttribute="top" secondItem="TMj-50-3z2" secondAttribute="bottom" constant="7.5" id="ts5-Er-nDc"/>
+                            <constraint firstItem="ECd-53-Hgu" firstAttribute="top" secondItem="uej-jx-YlA" secondAttribute="top" id="yQf-fN-UMW"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -238,9 +245,7 @@
                             <constraint firstItem="ZGy-nE-9RN" firstAttribute="top" secondItem="vUX-Gu-FeY" secondAttribute="bottom" constant="12" id="txK-Vy-d4X"/>
                         </constraints>
                     </view>
-                    <toolbarItems>
-                        <barButtonItem title="Item" id="uQi-kN-QxC"/>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Add A Manual Location" id="lYs-Ig-kR8">
                         <barButtonItem key="leftBarButtonItem" id="IFx-3H-P22"/>
                     </navigationItem>
