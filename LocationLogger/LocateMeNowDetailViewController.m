@@ -64,10 +64,14 @@
     // hides the save and change buttons until the
     // GPS has a chance to locate the user & set the map
     self.locateSaveButton.hidden = YES;
-    self.locateChangeButton.hidden = YES;
     self.dateLabel.hidden = YES;
     self.locationLabel.hidden = YES;
     self.pleaseWaitLabel.hidden = NO;
+    
+
+    
+    //For right now, keep this shown so can get to next menu
+    self.locateChangeButton.hidden = NO;
     
     //Hide the saved Image view
     self.savedImageView.hidden= YES;
@@ -336,12 +340,6 @@
         
         //If there is no previous entry, save what the user entered
     } else {
-        
-        
-        //create some fake data to test
-        self.currentTimestamp = [NSDate dateWithTimeIntervalSinceNow:(0.0)];
-        CLLocation *newLocation = [[CLLocation alloc] initWithLatitude:40.6821 longitude:-111.4713];
-        self.currentLocation = newLocation;
         
         
         //save to the shared instance

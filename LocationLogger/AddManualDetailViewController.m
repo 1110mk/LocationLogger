@@ -35,6 +35,8 @@
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 
+@property (weak, nonatomic) IBOutlet UIImageView *savedImageView;
+
 
 // User enters location by city and state
 // which needs to be converted to coordinates for Model Entry
@@ -54,6 +56,7 @@
     self.cityTextField.text = self.entryCity;
     self.stateTextField.text = self.entryState;
     self.countryTextField.text = self.entryCountry;
+    self.savedImageView.hidden = YES;
     
     //Set the segmented control. The user can change if they want.
     //to make none highlighted set to -1
@@ -270,6 +273,17 @@
                                                                             manualFlag:testThisEntry.manualFlag
                                                                                stateUS:testThisEntry.stateUS];
                     
+                    //animate a frame to show that it saved
+                    self.savedImageView.hidden = NO;
+                    
+                    [UIView animateWithDuration:1.0 delay:2.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                        self.savedImageView.alpha = 0.0;
+                        
+                    } completion:^(BOOL finished) {
+                        
+                    }];
+
+                    
                     
                 }]];  // END alert action use new location
                 
@@ -293,6 +307,17 @@
                                                                          partOfDay:self.addManualPartOfDay
                                                                         manualFlag:self.addManualManualFlag
                                                                            stateUS:self.addManualStateUS];
+                
+                //animate a frame to show that it saved
+                self.savedImageView.hidden = NO;
+                
+                [UIView animateWithDuration:1.0 delay:2.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    self.savedImageView.alpha = 0.0;
+                    
+                } completion:^(BOOL finished) {
+                    
+                }];
+
                 
                 NSLog(@"No matching entry. Store user's add manual location %@", self.addManualPlacemark.locality);
                 
