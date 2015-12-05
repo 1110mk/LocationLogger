@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B3103D171C12632800045361 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3103D161C12632800045361 /* SettingsViewController.m */; };
 		B311A38B1BF6CC6700AB8AC4 /* StateData.m in Sources */ = {isa = PBXBuildFile; fileRef = B311A38A1BF6CC6700AB8AC4 /* StateData.m */; };
 		B35553B01BF40FEC000AF37E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B35553AF1BF40FEC000AF37E /* CoreGraphics.framework */; };
 		B35553B21BF41025000AF37E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B35553B11BF41025000AF37E /* CoreText.framework */; };
@@ -71,6 +72,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B3103D151C12632800045361 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = ../SettingsViewController.h; sourceTree = "<group>"; };
+		B3103D161C12632800045361 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = ../SettingsViewController.m; sourceTree = "<group>"; };
 		B311A3891BF6CC6700AB8AC4 /* StateData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateData.h; sourceTree = "<group>"; };
 		B311A38A1BF6CC6700AB8AC4 /* StateData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateData.m; sourceTree = "<group>"; };
 		B35553AF1BF40FEC000AF37E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -169,6 +172,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B3103D141C12628700045361 /* Settings View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B3103D151C12632800045361 /* SettingsViewController.h */,
+				B3103D161C12632800045361 /* SettingsViewController.m */,
+			);
+			name = "Settings View Controller";
+			sourceTree = "<group>";
+		};
 		B371C6881BEC2AB400782B72 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -321,6 +333,7 @@
 		B3D39C311BE30360005C088B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B3103D141C12628700045361 /* Settings View Controller */,
 				B3E618E91BFBD15300CB121B /* Map View Controller */,
 				B371C6DB1BEE777D00782B72 /* Export View Controllers */,
 				B3A3C7DD1BE3BF4F0074797F /* Locate ViewControllers */,
@@ -483,6 +496,7 @@
 				B3E618E81BFBD14800CB121B /* MapViewController.m in Sources */,
 				B311A38B1BF6CC6700AB8AC4 /* StateData.m in Sources */,
 				B3D39C341BE31183005C088B /* ShowDataTableViewController.m in Sources */,
+				B3103D171C12632800045361 /* SettingsViewController.m in Sources */,
 				B3CF9FB01BF95F7200FC46EF /* ListByStateCustomCellTableViewCell.m in Sources */,
 				B3D39C2D1BE30289005C088B /* LocateMeNowDetailViewController.m in Sources */,
 				B3CF9FB31BF95F9300FC46EF /* ListByPercentCustomCellTableViewCell.m in Sources */,

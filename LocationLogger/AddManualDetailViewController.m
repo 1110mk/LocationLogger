@@ -21,6 +21,8 @@
 #import "LocateMeNowDetailViewController.h"
 #import "CheckEntryController.h"
 #import "TemporaryEntry.h"
+#import "SettingsViewController.h"
+
 
 
 @interface AddManualDetailViewController () <UITextFieldDelegate>
@@ -37,6 +39,8 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *savedImageView;
 
+@property (strong, nonatomic) NSString *localYear;
+
 
 // User enters location by city and state
 // which needs to be converted to coordinates for Model Entry
@@ -50,13 +54,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //Get the year from the settings
+    self.localYear =[[NSUserDefaults standardUserDefaults] objectForKey:@"yearKey"];
+    
+    
+    
     // The LocateMeNowDetailViewController is going to send data in so the fields can be set right away
     
     //Use the text fields to get the city, state, and country
-    self.cityTextField.text = self.entryCity;
-    self.stateTextField.text = self.entryState;
-    self.countryTextField.text = self.entryCountry;
     self.savedImageView.hidden = YES;
+    self.countryTextField.text = self.entryCountry;
+    self.stateTextField.text = self.entryState;
+    self.cityTextField.text = self.entryCity;
     
     //Set the segmented control. The user can change if they want.
     //to make none highlighted set to -1
@@ -69,7 +78,20 @@
     }
     
     // Do NOT allow the user to set a location in the future
+    //The minimum date is based on the year selected in the settings
+    
+    
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setYear:[self.localYear intValue]];
+    [components setMonth:1];
+    [components setDay:1];
+   
+    NSDate *minimumDate =  [calendar dateFromComponents:components];
+    
     NSDate *currentDate = [NSDate date];
+    
+    [self.locationDatePicker setMinimumDate:minimumDate];
     [self.locationDatePicker setMaximumDate:currentDate];
     
     //set the date picker
@@ -275,6 +297,8 @@
                     
                     //animate a frame to show that it saved
                     self.savedImageView.hidden = NO;
+                    self.savedImageView.alpha = 1.0;
+
                     
                     [UIView animateWithDuration:1.0 delay:2.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                         self.savedImageView.alpha = 0.0;
@@ -310,6 +334,7 @@
                 
                 //animate a frame to show that it saved
                 self.savedImageView.hidden = NO;
+                self.savedImageView.alpha = 1.0;
                 
                 [UIView animateWithDuration:1.0 delay:2.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                     self.savedImageView.alpha = 0.0;

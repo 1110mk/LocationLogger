@@ -176,7 +176,8 @@
     self.currentPartOfDay = partOfDayString;
     
     //4. set the Manual Flag property
-    self.currentManualFlag = [NSNumber numberWithBool:YES];
+    
+    self.currentManualFlag = [NSNumber numberWithBool:NO];
     
     //5. set the Placemark property by
     //          - getting the geocode placemark
@@ -318,6 +319,8 @@
             
             //animate a frame to show that it saved
             self.savedImageView.hidden = NO;
+            self.savedImageView.alpha = 1.0;
+
             
             [UIView animateWithDuration:1.0 delay:2.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                 self.savedImageView.alpha = 0.0;
@@ -353,6 +356,8 @@
         
         //animate a frame to show that it saved
         self.savedImageView.hidden = NO;
+        self.savedImageView.alpha = 1.0;
+
         
         [UIView animateWithDuration:1.0 delay:2.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             self.savedImageView.alpha = 0.0;

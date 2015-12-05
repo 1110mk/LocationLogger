@@ -59,10 +59,11 @@ CGSize *pageSize;
     
     [self sortEntries];
     
+
 }
 
 - (void)sortEntries {
-//    self.sortedEntries = [SearchEntriesController sortAllTheEntriesByDate:self.entriesArray];
+//    self.sortedEntries = [SearchEntriesController sortAllTheEntriesByDate:self.self.entriesArray];
     
     [[LocationEntryController sharedInstance] loadEntries];
     self.entriesArray = [LocationEntryController sharedInstance].entries;
@@ -83,13 +84,82 @@ CGSize *pageSize;
         //SORT by percentage
         self.sortedEntries = [SearchEntriesController sortAllTheEntriesByPercent:self.entriesArray];
     }
+    if (self.segmentedSortType.selectedSegmentIndex != 2) {
+    
+        [self sortOutYear];
+    }
 
+    
+}
+
+- (void)sortOutYear {
+    //Now keep only those dates in the selected year
+    NSString *localYear = [[NSUserDefaults standardUserDefaults] objectForKey:@"yearKey"];
+    
+    NSCalendar *calendar = [[NSCalendar alloc]
+                            initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSCalendarUnit unit = NSCalendarUnitYear;
+    
+    
+    
+    //check to make sure year matches
+    NSMutableArray *tmpArray = [[NSMutableArray alloc] initWithArray:self.sortedEntries];
+    for (Entry *temp in self.sortedEntries) {
+        NSLog(@"temp.timestamp = %@", temp.timestamp);
+        NSDateComponents *getYearComponent = [calendar components:unit fromDate:temp.timestamp];
+        
+        if ([getYearComponent year] != [localYear intValue]) {
+            [tmpArray removeObject:temp];
+        }
+        
+    }
+    self.sortedEntries = tmpArray;
+    for (Entry *temp in tmpArray) {
+        NSLog(@"tmpArray.timestamp = %@", temp.timestamp);
+    }
+    for (Entry *temp in self.sortedEntries) {
+        NSLog(@"sortedEntries.timestamp = %@", temp.timestamp);
+    }
+    
+    
+    
+    
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self sortEntries];
+    //Now sort the date by the timestamp keeping only those dates in the selected year
+    NSString *localYear = [[NSUserDefaults standardUserDefaults] objectForKey:@"yearKey"];
+    
+    NSCalendar *calendar = [[NSCalendar alloc]
+                            initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSCalendarUnit unit = NSCalendarUnitYear;
+    
+    
+    if (self.segmentedSortType.selectedSegmentIndex != 2) {
+        //check to make sure year matches
+        
+        NSMutableArray *tmpArray = [[NSMutableArray alloc] initWithArray:self.sortedEntries];
+        for (Entry *temp in self.sortedEntries) {
+            NSLog(@"temp.timestamp = %@", temp.timestamp);
+            NSDateComponents *getYearComponent = [calendar components:unit fromDate:temp.timestamp];
+            
+            if ([getYearComponent year] != [localYear intValue]) {
+                [tmpArray removeObject:temp];
+            }
+            
+        }
+        self.sortedEntries = tmpArray;
+        for (Entry *temp in tmpArray) {
+            NSLog(@"tmpArray.timestamp = %@", temp.timestamp);
+        }
+        for (Entry *temp in self.sortedEntries) {
+            NSLog(@"sortedEntries.timestamp = %@", temp.timestamp);
+        }
+    }
+
     [self.tableView reloadData];
 }
 
@@ -200,15 +270,29 @@ CGSize *pageSize;
         //Get the custom tableview cell for displaying by state with the most percentage
         ListByPercentCustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"listByPercentCell"];
         
-        NSString *stateUSString = [NSString stringWithFormat:@"%@", stateData.stateAbbreviation];
-        cell.stateUSLabel.text = stateUSString;
+        if ([stateData.statePercentage doubleValue] > 0)    {
+            NSString *stateUSString = [NSString stringWithFormat:@"%@", stateData.stateAbbreviation];
+            cell.stateUSLabel.text = stateUSString;
+            
+            
+            NSString *percentString = [NSString stringWithFormat:@"%.0f", ([stateData.statePercentage doubleValue] * 100.0)];
+            percentString = [percentString stringByAppendingString:@"%"];
+            cell.percentLabel.text = percentString;
+            
+            NSString *dayString = [NSString stringWithFormat:@"%@", stateData.stateCount];
+            cell.dayLabel.text = dayString;
+
+            
+        } else {
+            cell.stateUSLabel.text = @"";
+            cell.percentLabel.text = @"";
+            cell.dayLabel.text = @"";
+            
+            
+        }
         
         
-        NSString *percentString = [NSString stringWithFormat:@"%.02f", [stateData.statePercentage doubleValue]];
-        cell.percentLabel.text = percentString;
         
-        NSString *dayString = [NSString stringWithFormat:@"%@", stateData.stateCount];
-        cell.dayLabel.text = dayString;
         
         return cell;
 
@@ -256,15 +340,19 @@ CGSize *pageSize;
         
         self.sortedEntries = [SearchEntriesController
                               sortAllTheEntriesByDate:self.entriesArray];
+        [self sortOutYear];
         
     } else if (self.segmentedSortType.selectedSegmentIndex == 1) {
         
         self.sortedEntries = [SearchEntriesController sortAllTheEntriesByState:self.entriesArray];
+        [self sortOutYear];
         
     } else if (self.segmentedSortType.selectedSegmentIndex == 2)   {
         
         self.allTheStatesArray = [SearchEntriesController sortAllTheEntriesByPercent:self.entriesArray];
+        
     }
+
     [self.tableView reloadData];
     
 }

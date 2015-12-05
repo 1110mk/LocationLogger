@@ -17,10 +17,13 @@
     //Create a mutable array to work with inside the method
     NSMutableArray *sortedLocalEntries = [[NSMutableArray alloc] initWithArray:entriesToSort];
     
-    //Now sort the date by the timestamp
-    NSSortDescriptor *sortDate = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
-    NSSortDescriptor *sortPartOfDay = [NSSortDescriptor sortDescriptorWithKey:@"partOfDay" ascending:YES];
-    [sortedLocalEntries sortUsingDescriptors:@[sortDate,sortPartOfDay]];
+
+    if(sortedLocalEntries) {
+        NSSortDescriptor *sortDate = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
+        NSSortDescriptor *sortPartOfDay = [NSSortDescriptor sortDescriptorWithKey:@"partOfDay" ascending:YES];
+        [sortedLocalEntries sortUsingDescriptors:@[sortDate,sortPartOfDay]];
+    }
+    
     return sortedLocalEntries;
 }
 
@@ -28,17 +31,25 @@
 + (NSMutableArray *)sortAllTheEntriesByState: (NSArray *)entriesToSort {
 
     //Create a mutable array of local entries to work with inside the method
-    NSMutableArray *sortedLocalEntries = [[NSMutableArray alloc] initWithArray:entriesToSort];
+    if (entriesToSort.count > 0) {
+        
+        NSMutableArray *sortedLocalEntries = [[NSMutableArray alloc] initWithArray:entriesToSort];
     
-    NSSortDescriptor *sortDate = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
-    NSSortDescriptor *sortPartOfDay = [NSSortDescriptor sortDescriptorWithKey:@"partOfDay" ascending:YES];
-   //Now sort the data by the state name
-    NSSortDescriptor *sortState = [NSSortDescriptor sortDescriptorWithKey:@"placemark.administrativeArea" ascending:NO];
-    NSSortDescriptor *sortCountry = [NSSortDescriptor sortDescriptorWithKey:@"placemark.country" ascending:NO];
+        NSSortDescriptor *sortDate = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
+        NSSortDescriptor *sortPartOfDay = [NSSortDescriptor sortDescriptorWithKey:@"partOfDay" ascending:YES];
+        //Now sort the data by the state name
+        NSSortDescriptor *sortState = [NSSortDescriptor sortDescriptorWithKey:@"placemark.administrativeArea" ascending:NO];
+        NSSortDescriptor *sortCountry = [NSSortDescriptor sortDescriptorWithKey:@"placemark.country" ascending:NO];
     
     
-    [sortedLocalEntries sortUsingDescriptors:@[sortCountry, sortState, sortDate, sortPartOfDay]];
-    return sortedLocalEntries;
+        [sortedLocalEntries sortUsingDescriptors:@[sortCountry, sortState, sortDate, sortPartOfDay]];
+        return sortedLocalEntries;
+    } else {
+        NSMutableArray *mutableEntries = [entriesToSort mutableCopy];
+        return mutableEntries;
+    }
+    
+
 }
 
 //This method sorts the entries by the states with the greatest percent
@@ -46,158 +57,189 @@
 
 + (NSMutableArray *)sortAllTheEntriesByPercent: (NSArray *)entriesToSort {
     
-    
-    //Create a mutable array to work with inside this View Controller; this has every day with possibly 3 locations
-    //You need this because you have to change the entries
+    if (entriesToSort.count > 0) {
     
     
-    //create the array of states, the count, and the percentage
-    // You need to keep track of each day in a particular state
-    // Use the StateData class to have name, daily count, percentage
-    // This only had 50 entries, one for each state
-    
-    NSMutableArray *stateDataArray = [[NSMutableArray alloc] init];
-    
-    NSArray *stateNames = @[@"AL", @"AK", @"AZ", @"AR", @"CA", @"CO", @"CT", @"DE", @"DC", @"FL", @"GA", @"HI", @"ID", @"IL", @"IN", @"IA", @"KS", @"KY", @"LA", @"ME", @"MD", @"MA", @"MI", @"MN", @"MS", @"MO",@"MT", @"NE", @"NV", @"NH", @"NJ", @"NM", @"NY", @"NC", @"ND", @"OH", @"OK", @"OR", @"PA", @"RI", @"SC", @"SD", @"TN", @"TX", @"UT", @"VT", @"VA", @"WA", @"WV", @"WI", @"WY"];
-    
-//    NSArray *stateLongNames =[
-//                                                          @"Alabama",
-//                                                          @"Alaska",
-//                                                          @"Arizona",
-//                                                          @"Arkansas",
-//                                                          @"California",
-//                                                          @"Colorado",
-//                                                          @"Connecticut",
-//                                                          @"Delaware",
-//                                                          @"District of Columbia",
-//                                                          @"Florida",
-//                                                          @"Georgia",
-//                                                          @"Hawaii",
-//                                                          @"Idaho",
-//                                                          @"Illinois",
-//                                                          @"Indiana",
-//                                                          @"Iowa",
-//                                                          @"Kansas",
-//                                                          @"Kentucky",
-//                                                          @"Louisiana",
-//                                                          @"Maine",
-//                                                          @"Maryland",
-//                                                          @"Massachusetts",
-//                                                          @"Michigan",
-//                                                          @"Minnesota",
-//                                                          @"Mississippi",
-//                                                          @"Missouri",
-//                                                          @"Montana",
-//                                                          @"Nebraska",
-//                                                          @"Nevada",
-//                                                          @"New Hampshire",
-//                                                          @"New Jersey",
-//                                                          @"New Mexico",
-//                                                          @"New York",
-//                                                          @"North Carolina",
-//                                                          @"North Dakota",
-//                                                          @"Ohio",
-//                                                          @"Oklahoma",
-//                                                          @"Oregon",
-//                                                          @"Pennsylvania",
-//                                                          @"Rhode Island",
-//                                                          @"South Carolina",
-//                                                          @"South Dakota",
-//                                                          @"Tennessee",
-//                                                          @"Texas",
-//                                                          @"Utah",
-//                                                          @"Vermont",
-//                                                          @"Virginia",
-//                                                          @"Washington",
-//                                                          @"West Virginia",
-//                                                          @"Wisconsin",
-//                                                            @"Wyoming"];
+        //Create a mutable array to work with inside this View Controller; this has every day with possibly 3 locations
+        //You need this because you have to change the entries
     
     
-    for (int i=0; i < 51; i++ ) {
-        StateData *stateData = [[StateData alloc] init];
-        stateData.stateAbbreviation = stateNames[i];
+        //create the array of states, the count, and the percentage
+        // You need to keep track of each day in a particular state
+        // Use the StateData class to have name, daily count, percentage
+            // This only had 50 entries, one for each state
+    
+        NSMutableArray *stateDataArray = [[NSMutableArray alloc] init];
+    
+        NSArray *stateNames = @[@"AL", @"AK", @"AZ", @"AR", @"CA", @"CO", @"CT", @"DE", @"DC", @"FL", @"GA", @"HI", @"ID", @"IL", @"IN", @"IA", @"KS", @"KY", @"LA", @"ME", @"MD", @"MA", @"MI", @"MN", @"MS", @"MO",@"MT", @"NE", @"NV", @"NH", @"NJ", @"NM", @"NY", @"NC", @"ND", @"OH", @"OK", @"OR", @"PA", @"RI", @"SC", @"SD", @"TN", @"TX", @"UT", @"VT", @"VA", @"WA", @"WV", @"WI", @"WY"];
+    
+        //    NSArray *stateLongNames =[
+        //                                                          @"Alabama",
+        //                                                          @"Alaska",
+        //                                                          @"Arizona",
+        //                                                          @"Arkansas",
+        //                                                          @"California",
+        //                                                          @"Colorado",
+        //                                                          @"Connecticut",
+        //                                                          @"Delaware",
+        //                                                          @"District of Columbia",
+        //                                                          @"Florida",
+        //                                                          @"Georgia",
+        //                                                          @"Hawaii",
+        //                                                          @"Idaho",
+        //                                                          @"Illinois",
+        //                                                          @"Indiana",
+        //                                                          @"Iowa",
+        //                                                          @"Kansas",
+        //                                                          @"Kentucky",
+        //                                                          @"Louisiana",
+        //                                                          @"Maine",
+        //                                                          @"Maryland",
+        //                                                          @"Massachusetts",
+        //                                                          @"Michigan",
+        //                                                          @"Minnesota",
+        //                                                          @"Mississippi",
+        //                                                          @"Missouri",
+        //                                                          @"Montana",
+        //                                                          @"Nebraska",
+        //                                                          @"Nevada",
+        //                                                          @"New Hampshire",
+        //                                                          @"New Jersey",
+        //                                                          @"New Mexico",
+        //                                                          @"New York",
+        //                                                          @"North Carolina",
+        //                                                          @"North Dakota",
+        //                                                          @"Ohio",
+        //                                                          @"Oklahoma",
+        //                                                          @"Oregon",
+        //                                                          @"Pennsylvania",
+        //                                                          @"Rhode Island",
+        //                                                          @"South Carolina",
+        //                                                          @"South Dakota",
+        //                                                          @"Tennessee",
+        //                                                          @"Texas",
+        //                                                          @"Utah",
+        //                                                          @"Vermont",
+        //                                                          @"Virginia",
+        //                                                          @"Washington",
+        //                                                          @"West Virginia",
+        //                                                          @"Wisconsin",
+        //                                                            @"Wyoming"];
+    
+    
+        for (int i=0; i < 51; i++ ) {
+            StateData *stateData = [[StateData alloc] init];
+            stateData.stateAbbreviation = stateNames[i];
         
-        // initialize the counts to Zero for below
-        stateData.stateCount = @(0) ;
-        stateData.statePercentage = @(0.0);
-        stateData.stateLocation = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
-        [stateDataArray addObject:stateData];
-    }
+            // initialize the counts to Zero for below
+            stateData.stateCount = @(0) ;
+            stateData.statePercentage = @(0.0);
+            stateData.stateLocation = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
+            [stateDataArray addObject:stateData];
+        }
     
-    NSLog(@"\n\n\nNumber of states:\n   %ld \n", stateDataArray.count);
+        NSLog(@"\n\n\nNumber of states:\n   %ld \n", stateDataArray.count);
     
-    //At this point in the program, you have 3 arrays
-    //  1) entriesToSort which was sent to the method
-    //  2) sortedLocalEntries, which is a mutable copy
-    //  3) stateDataArray, which has all 50 states
+        //At this point in the program, you have 3 arrays
+        //  1) entriesToSort which was sent to the method
+        //  2) sortedLocalEntries, which is a mutable copy
+        //  3) stateDataArray, which has all 50 states
     
-    //Now for each day you need to pick a state
-    //Find the possibly 3 entries for a day
+        //Now for each day you need to pick a state
+        //Find the possibly 3 entries for a day
     
     
-    //**** Get only one entry for each day
-    //This is the array with just one Entry per day
-    NSMutableArray *justOneEntryPerDay = [[NSMutableArray alloc] init];
+        //**** Get only one entry for each day
+        //This is the array with just one Entry per day
+        NSMutableArray *justOneEntryPerDay = [[NSMutableArray alloc] init];
     
-    //Create a mutable array to work with inside the method
-    NSMutableArray *sortedLocalEntries = [[NSMutableArray alloc] initWithArray:entriesToSort];
+        //Create a mutable array to work with inside the method
+        NSMutableArray *sortedLocalEntries = [[NSMutableArray alloc] initWithArray:entriesToSort];
     
-    //Now sort the date by the timestamp
-    NSSortDescriptor *sortDate = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
-    NSSortDescriptor *sortPartOfDay = [NSSortDescriptor sortDescriptorWithKey:@"partOfDay" ascending:NO];
-    [sortedLocalEntries sortUsingDescriptors:@[sortDate,sortPartOfDay]];
+        //eliminate entries not in the year
+        //sort out the year
+        //Now keep only those dates in the selected year
+        NSString *localYear = [[NSUserDefaults standardUserDefaults] objectForKey:@"yearKey"];
     
-    for (Entry *logEntry in sortedLocalEntries) {
-        NSLog(@"\n\n Entry: \n%@, \n%@, \n%@, \n%@: \n\n", logEntry.placemark.administrativeArea, logEntry.placemark.locality, logEntry.timestamp, logEntry.partOfDay );
-    }
+        NSCalendar *calendar = [[NSCalendar alloc]
+                            initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        NSCalendarUnit unit = NSCalendarUnitYear;
+    
+        //check to make sure year matches
+        NSMutableArray *tmpArray = [[NSMutableArray alloc] initWithArray:sortedLocalEntries];
+        for (Entry *temp in sortedLocalEntries) {
+            NSDateComponents *getYearComponent = [calendar components:unit fromDate:temp.timestamp];
+            
+            if ([getYearComponent year] != [localYear intValue]) {
+                [tmpArray removeObject:temp];
+            }
+        
+        }
+        sortedLocalEntries = tmpArray;
+        for (Entry *temp in tmpArray) {
+            NSLog(@"tmpArray.timestamp = %@", temp.timestamp);
+        }
+        for (Entry *temp in sortedLocalEntries) {
+            NSLog(@"sortedEntries.timestamp = %@", temp.timestamp);
+        }
+    
+
+    
+        //Now sort the date by the timestamp
+        NSSortDescriptor *sortDate = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
+        NSSortDescriptor *sortPartOfDay = [NSSortDescriptor sortDescriptorWithKey:@"partOfDay" ascending:NO];
+        [sortedLocalEntries sortUsingDescriptors:@[sortDate,sortPartOfDay]];
+    
+        for (Entry *logEntry in sortedLocalEntries) {
+            NSLog(@"\n\n Entry: \n%@, \n%@, \n%@, \n%@: \n\n", logEntry.placemark.administrativeArea, logEntry.placemark.locality, logEntry.timestamp, logEntry.partOfDay );
+        }
 
     
     
-    //The first loop is through the entire database
-    for (int i = 0; i < (sortedLocalEntries.count - 1); i++) { //don't check past the array
-        Entry *firstTimeEntry = sortedLocalEntries[i];
+        //The first loop is through the entire database
+        for (int i = 0; i < (sortedLocalEntries.count - 1); i++) { //don't check past the array
+            Entry *firstTimeEntry = sortedLocalEntries[i];
         
-        //Get date components to compare days
-        NSCalendar *calendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSCalendarUnit units = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
-        
-        //These date components are from the Entries sent into the method
-        NSDateComponents *firstComponents = [calendar components:units fromDate:firstTimeEntry.timestamp];
-        
-        NSLog(@"\n\nFirstTimeEntry i = :%d %ld %ld %ld\n\n", i, (long)[firstComponents month], (long)[firstComponents day], (long)[firstComponents year]);
-        
-        //Check if there is another day
-        if ((sortedLocalEntries.count - i) > 1) {
-        
-        
-            //See if there is a matching Day in the array. You just need to look at the next two entries.
-            Entry *secondTimeEntry = sortedLocalEntries[i+1];
-            
-            //Get the date components of Day 2
-            
             //Get date components to compare days
-            NSCalendar *secondCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-            NSCalendarUnit secondUnits = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
-            
+            NSCalendar *calendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+            NSCalendarUnit units = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+        
             //These date components are from the Entries sent into the method
-            NSDateComponents *secondComponents = [secondCalendar components:secondUnits fromDate:secondTimeEntry.timestamp];
+            NSDateComponents *firstComponents = [calendar components:units fromDate:firstTimeEntry.timestamp];
+        
+            NSLog(@"\n\nFirstTimeEntry i = :%d %ld %ld %ld\n\n", i, (long)[firstComponents month], (long)[firstComponents day], (long)[firstComponents year]);
+        
+            //Check if there is another day
+            if ((sortedLocalEntries.count - i) > 1) {
+        
+        
+                //See if there is a matching Day in the array. You just need to look at the next two entries.
+                Entry *secondTimeEntry = sortedLocalEntries[i+1];
+            
+                //Get the date components of Day 2
                 
-            NSLog(@"\n\nSecondTimeEntry i+1 = :%d %ld %ld %ld\n\n", i+1, (long)[secondComponents month], (long)[secondComponents day], (long)[secondComponents year]);
+                //Get date components to compare days
+                NSCalendar *secondCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+                NSCalendarUnit secondUnits = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+            
+                //These date components are from the Entries sent into the method
+                NSDateComponents *secondComponents = [secondCalendar components:secondUnits fromDate:secondTimeEntry.timestamp];
+                
+                NSLog(@"\n\nSecondTimeEntry i+1 = :%d %ld %ld %ld\n\n", i+1, (long)[secondComponents month], (long)[secondComponents    day], (long)[secondComponents year]);
 
             
-            if (([secondComponents year] == [firstComponents year]) && ([secondComponents month] == [secondComponents month]) &&([secondComponents day] == [firstComponents day]))    {
+                if (([secondComponents year] == [firstComponents year]) && ([secondComponents month] == [secondComponents month]) &&([secondComponents day] == [firstComponents day]))    {
                     
-                NSLog(@"Two Entries Match. Right after checking components");
+                    NSLog(@"Two Entries Match. Right after checking components");
                         
-                //now you have two matching days called Day1 and Day2
-                //See if the next entry in the array matches
-                if ((sortedLocalEntries.count -  i) > 2) {  //don't check past end of array
+                    //now you have two matching days called Day1 and Day2
+                    //See if the next entry in the array matches
+                    if ((sortedLocalEntries.count -  i) > 2) {  //don't check past end of array
                         
-                    NSLog(@"Two Entries Match & Another Entry in Array.");
-                                
-                    Entry *thirdTimeEntry = sortedLocalEntries[i+2];
-                                    
+                        NSLog(@"Two Entries Match & Another Entry in Array.");
+                        
+                        Entry *thirdTimeEntry = sortedLocalEntries[i+2];
+                        
                     //Get date components to compare days
                     NSCalendar *thirdCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
                     NSCalendarUnit thirdUnits = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
@@ -409,6 +451,10 @@
 
 
     return stateDataArray;
+    } else {
+        NSMutableArray *mutableEntries = [entriesToSort mutableCopy];
+        return  mutableEntries;
+    } //END if entriesToSort
     
 } // search all entries by percent
 
